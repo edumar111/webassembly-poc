@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCall anf Cwrap</title>
+    <script src="streaming.js"></script>
+</head>
+<body>
+    Streaming WebAssembly
+    <script>
+        
+        function run_wasm(){
+           var exports;
+
+           WebAssembly.instantiateStreaming(
+                fetch("streaming.wasm"),{}
+            ).then(results => exports = results.instance.exports);
+
+            WebAssembly.instantiateStreaming(
+                fetch("streaming.wasm"),{}
+            ).then(results =>{
+                var a = document.querySelector("#a").value;
+                var sum = exports.sumOfNInts(a);
+                document.querySelector("#out")
+                .innerHTML += `${a} => ${sum}<br/>`;
+            });
+           
+            // WebAssembly.instantiateStreaming(
+            //     fetch("streaming.wasm"),{}
+            // ).then(results =>{
+            //     var a = document.querySelector("#a").value;
+            //     var sum = results.instance.exports.sumOfNInts(a);
+            //     document.querySelector("#out")
+            //     .innerHTML += `${a} => ${sum}<br/>`;
+            // });
+        }
+
+
+    </script>
+    <input  type="number" id="a"></input> 
+    <button onclick="run_wasm()">Calculate</button>
+    <p id="out"></p>    
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCall anf Cwrap</title>
+    <script src="wrapping.js"></script>
+</head>
+<body>
+    Wrapper WebAssembly
+    <script>
+        var sumNums = Module.cwrap(
+            "sumNums",
+            "number",
+            ["number","number"]
+        )
+
+        var subtractNums = Module.cwrap(
+            "subtractNums",
+            "number",
+            ["number","number"]
+        )
+
+        function run_wasm(){
+            var result = Module.ccall(
+                "main",
+                "number",
+                null,
+                null,
+            )
+            console.log("Result", result)
+
+            var a = document.querySelector("#a").value ;
+            var b = document.querySelector("#b").value ;
+            var sumResult = Module.ccall(
+                "sumNums",
+                "number",
+                ["number","number"],
+                [a,b]
+
+            )
+            console.log("sumResult", sumResult)
+
+            // wrap
+            wrapResult = sumNums(a,b);
+            console.log("wrapResult", wrapResult)
+
+            subtractResult = subtractNums(a,b)
+            console.log("subtractResult", subtractResult)
+
+        }
+
+
+    </script>
+    <input  type="number" id="a"></input> 
+    <input  type="number" id="b"></input> 
+    <button onclick="run_wasm()">Calculate</button>
+    
+</body>
+</html>
